@@ -22,17 +22,16 @@ class LM75A:
         raw_data = self.bus.read_i2c_block_data(self.DEVICE_ADDRESS, self.TEMP_REGISTER, 2)
         
         # 將兩個字節組合成 16 位整數
-        raw_temp = (raw_data[0] << 8) | raw_data[1]
+        raw = (raw_data[0] << 8) | raw_data[1]
         
-        # 右移 5 位，因為低 5 位不使用
-        raw_temp = raw_temp >> 5
+        # SWAP LSB 和 MSB
+        raw = ((raw << 8) & 0xFF00) + (raw >> 8)
         
-        # 處理負溫度值（如果最高位為 1）
-        if raw_temp & 0x400:
-            raw_temp = raw_temp - 0x800
-            
-        # 轉換為攝氏度（每一位代表 0.125°C）
-        temperature = raw_temp * 0.125
+        # 只有 9 位包含溫度數據，右移 7 位
+        raw = raw >> 7
+        
+        # 溫度刻度為 0.5
+        temperature = raw / 2
         
         return temperature
 
