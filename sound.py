@@ -6,7 +6,7 @@ while True:
     select = int(input("Please select the type of output <1-3>, 0:exit -> "))
     if select == 0:
         GPIO.output(7, 0)
-    break
+        break
 
     if select == 1:
         for i in range(1000):
