@@ -13,81 +13,58 @@ GPIO.setup(buzzer_pin, GPIO.OUT)
 try:
     print("蜂鳴器測試開始...")
     
-    # 方法1：直接控制高低電平（增強版）
-    print("測試方法1：直接控制高低電平（增強版）")
+    # 方法1：直流模式（持續高電平）
+    print("測試方法1：直流模式（持續高電平）")
+    print("持續高電平 5 秒...")
+    GPIO.output(buzzer_pin, GPIO.HIGH)  # 打開蜂鳴器，持續高電平
+    time.sleep(5)
+    GPIO.output(buzzer_pin, GPIO.LOW)   # 關閉蜂鳴器
+    time.sleep(1)
+    
+    # 方法2：直流模式（持續低電平）
+    print("測試方法2：直流模式（持續低電平）")
+    print("持續低電平 5 秒...")
+    GPIO.output(buzzer_pin, GPIO.LOW)  # 持續低電平
+    time.sleep(5)
+    
+    # 方法3：低頻交流模式
+    print("測試方法3：低頻交流模式（1Hz）")
     for _ in range(5):
-        GPIO.output(buzzer_pin, GPIO.HIGH)  # 打開蜂鳴器
-        time.sleep(0.2)
-        GPIO.output(buzzer_pin, GPIO.LOW)   # 關閉蜂鳴器
-        time.sleep(0.1)  # 縮短關閉時間，增加佔空比
+        GPIO.output(buzzer_pin, GPIO.HIGH)
+        time.sleep(0.5)
+        GPIO.output(buzzer_pin, GPIO.LOW)
+        time.sleep(0.5)
     
-    # 方法2：使用PWM模擬不同頻率（增強版）
-    print("測試方法2：使用PWM模擬不同頻率（增強版）")
-    buzzer = GPIO.PWM(buzzer_pin, 261)  # 從第一個頻率開始
-    buzzer.start(80)  # 增加佔空比到80%，提高音量
+    # 方法4：中頻交流模式
+    print("測試方法4：中頻交流模式（10Hz）")
+    for _ in range(50):
+        GPIO.output(buzzer_pin, GPIO.HIGH)
+        time.sleep(0.05)
+        GPIO.output(buzzer_pin, GPIO.LOW)
+        time.sleep(0.05)
     
-    # 播放不同頻率的聲音
-    frequencies = [261, 293, 329, 349, 391, 440, 493, 523]  # 音階頻率
+    # 方法5：高頻交流模式
+    print("測試方法5：高頻交流模式（100Hz）")
+    for _ in range(100):
+        GPIO.output(buzzer_pin, GPIO.HIGH)
+        time.sleep(0.005)
+        GPIO.output(buzzer_pin, GPIO.LOW)
+        time.sleep(0.005)
     
-    # 使用更長的持續時間
-    for freq in frequencies:
-        print(f"播放頻率: {freq}Hz")
+    # 方法6：PWM模式（可調頻率）
+    print("測試方法6：PWM模式（可調頻率）")
+    buzzer = GPIO.PWM(buzzer_pin, 1)  # 從1Hz開始
+    buzzer.start(50)  # 佔空比為50%
+    
+    # 測試不同的PWM頻率
+    pwm_freqs = [1, 5, 10, 50, 100, 500, 1000]
+    for freq in pwm_freqs:
+        print(f"PWM頻率: {freq}Hz")
         buzzer.ChangeFrequency(freq)
-        time.sleep(1)
-    
-    # 播放一個簡單的旋律（增強版）
-    print("播放簡單旋律（增強版）...")
-    melody = [261, 261, 391, 391, 440, 440, 391, 0,  # 小星星
-              349, 349, 329, 329, 293, 293, 261, 0]
-    durations = [0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.6, 0.1,
-                0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.6, 0.1]
-    
-    for i in range(len(melody)):
-        if melody[i] == 0:  # 休止符
-            buzzer.stop()
-            time.sleep(durations[i])
-            if i < len(melody) - 1 and melody[i+1] != 0:  # 如果下一個音不是休止符
-                buzzer.start(80)  # 增加佔空比到80%
-        else:
-            buzzer.ChangeFrequency(melody[i])
-            time.sleep(durations[i])
+        time.sleep(3)
     
     # 停止蜂鳴器
     buzzer.stop()
-    
-    # 方法3：手動產生方波（增強版）
-    print("測試方法3：手動產生方波（增強版）")
-    
-    # 使用更精確的時間控制，並調整佔空比
-    def play_tone(frequency, duration, duty_cycle=0.8):  # 增加佔空比參數，預設為80%
-        period = 1.0 / frequency
-        high_time = period * duty_cycle  # 高電平時間
-        low_time = period * (1 - duty_cycle)  # 低電平時間
-        cycles = int(frequency * duration)
-        
-        for i in range(cycles):
-            GPIO.output(buzzer_pin, GPIO.HIGH)
-            time.sleep(high_time)
-            GPIO.output(buzzer_pin, GPIO.LOW)
-            time.sleep(low_time)
-    
-    # 播放一個音階
-    scale = [261, 293, 329, 349, 391, 440, 493, 523]
-    for freq in scale:
-        print(f"手動產生頻率: {freq}Hz")
-        play_tone(freq, 0.5, 0.8)  # 使用80%的佔空比
-        time.sleep(0.1)
-    
-    # 測試不同頻率範圍
-    print("測試不同頻率範圍...")
-    test_freqs = [100, 500, 1000, 2000, 3000, 4000]
-    for freq in test_freqs:
-        print(f"測試頻率: {freq}Hz")
-        buzzer = GPIO.PWM(buzzer_pin, freq)
-        buzzer.start(90)  # 使用90%的佔空比
-        time.sleep(1)
-        buzzer.stop()
-        time.sleep(0.2)
     
     print("蜂鳴器測試結束")
 
