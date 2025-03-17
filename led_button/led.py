@@ -7,7 +7,7 @@ GPIO.setmode(GPIO.BOARD)
 # 設定 RGB LED 的 GPIO 腳位
 red = 3
 green = 5
-blue = 12
+blue = 7
 
 GPIO.setup(red, GPIO.OUT)
 GPIO.setup(green, GPIO.OUT)
