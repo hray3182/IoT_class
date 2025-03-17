@@ -33,16 +33,16 @@ def set_color(r, g, b):
         g (int): 綠色亮度 (0-100，0=全亮，100=全暗)
         b (int): 藍色亮度 (0-100，0=全亮，100=全暗)
     """
-    red_pwm.ChangeDutyCycle(100 - r)
-    green_pwm.ChangeDutyCycle(100 - g)
-    blue_pwm.ChangeDutyCycle(100 - b)
+    red_pwm.ChangeDutyCycle( r)
+    green_pwm.ChangeDutyCycle( g)
+    blue_pwm.ChangeDutyCycle( b)
 
 try:
     print("RGB LED 全亮模式啟動")
     print("按下 Ctrl+C 可停止程式")
     
     # 設定 RGB 全亮（在反轉邏輯中是設為 0,0,0）
-    set_color(0, 0, 0)
+    set_color(100, 100, 100)
     
     # 保持程式運行，直到使用者中斷
     while True:
