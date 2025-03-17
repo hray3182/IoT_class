@@ -37,113 +37,47 @@ def set_color(r, g, b):
     green_pwm.ChangeDutyCycle(g)
     blue_pwm.ChangeDutyCycle(b)
 
-def test_basic_colors():
-    """測試基本顏色"""
-    print("測試基本顏色...")
+def test_rgb_colors():
+    """測試紅綠藍三種基本顏色"""
+    print("開始測試 RGB 三種基本顏色...")
     
-    # 紅色
-    print("紅色")
+    # 關閉所有顏色
+    print("關閉所有顏色")
+    set_color(0, 0, 0)
+    time.sleep(1)
+    
+    # 測試紅色
+    print("測試紅色")
     set_color(100, 0, 0)
+    time.sleep(3)
+    
+    # 關閉所有顏色
+    print("關閉所有顏色")
+    set_color(0, 0, 0)
     time.sleep(1)
     
-    # 綠色
-    print("綠色")
+    # 測試綠色
+    print("測試綠色")
     set_color(0, 100, 0)
+    time.sleep(3)
+    
+    # 關閉所有顏色
+    print("關閉所有顏色")
+    set_color(0, 0, 0)
     time.sleep(1)
     
-    # 藍色
-    print("藍色")
+    # 測試藍色
+    print("測試藍色")
     set_color(0, 0, 100)
-    time.sleep(1)
+    time.sleep(3)
     
-    # 黃色 (紅 + 綠)
-    print("黃色")
-    set_color(100, 100, 0)
-    time.sleep(1)
-    
-    # 紫色 (紅 + 藍)
-    print("紫色")
-    set_color(100, 0, 100)
-    time.sleep(1)
-    
-    # 青色 (綠 + 藍)
-    print("青色")
-    set_color(0, 100, 100)
-    time.sleep(1)
-    
-    # 白色 (紅 + 綠 + 藍)
-    print("白色")
-    set_color(100, 100, 100)
-    time.sleep(1)
-    
-    # 關閉
+    # 關閉所有顏色
+    print("關閉所有顏色")
     set_color(0, 0, 0)
 
-def color_fade(delay=0.02):
-    """顏色漸變效果"""
-    print("顏色漸變效果...")
-    
-    # 紅色漸變
-    print("紅色漸變")
-    for duty in range(0, 101, 2):
-        set_color(duty, 0, 0)
-        time.sleep(delay)
-    for duty in range(100, -1, -2):
-        set_color(duty, 0, 0)
-        time.sleep(delay)
-    
-    # 綠色漸變
-    print("綠色漸變")
-    for duty in range(0, 101, 2):
-        set_color(0, duty, 0)
-        time.sleep(delay)
-    for duty in range(100, -1, -2):
-        set_color(0, duty, 0)
-        time.sleep(delay)
-    
-    # 藍色漸變
-    print("藍色漸變")
-    for duty in range(0, 101, 2):
-        set_color(0, 0, duty)
-        time.sleep(delay)
-    for duty in range(100, -1, -2):
-        set_color(0, 0, duty)
-        time.sleep(delay)
-
-def rainbow_cycle(cycles=3, delay=0.01):
-    """彩虹循環效果"""
-    print("彩虹循環效果...")
-    
-    # 定義彩虹顏色序列 (R, G, B)
-    colors = [
-        (100, 0, 0),    # 紅
-        (100, 50, 0),   # 橙
-        (100, 100, 0),  # 黃
-        (0, 100, 0),    # 綠
-        (0, 100, 100),  # 青
-        (0, 0, 100),    # 藍
-        (100, 0, 100)   # 紫
-    ]
-    
-    for _ in range(cycles):
-        for r, g, b in colors:
-            set_color(r, g, b)
-            time.sleep(0.5)
-
 try:
-    print("開始 RGB LED 測試...")
-    
-    # 測試基本顏色
-    test_basic_colors()
-    time.sleep(1)
-    
-    # 測試顏色漸變
-    color_fade()
-    time.sleep(1)
-    
-    # 測試彩虹循環
-    rainbow_cycle()
-    
+    # 測試紅綠藍三種基本顏色
+    test_rgb_colors()
     print("測試完成！")
 
 except KeyboardInterrupt:
