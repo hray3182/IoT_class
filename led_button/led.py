@@ -48,8 +48,8 @@ def fade_in_out(pwm, delay=0.02):
         pwm.ChangeDutyCycle(duty)
         time.sleep(delay)
 
-def rainbow_breath_effect(delay=0.01):
-    """產生七彩呼吸效果"""
+def rainbow_breath_effect(delay=0.05):
+    """產生七彩平滑過渡效果"""
     # 定義不同顏色組合 (R, G, B)，使用標準邏輯 0=全暗，100=全亮
     # set_color 函數會負責將這些值反轉為硬體所需的值
     colors = [
@@ -62,26 +62,41 @@ def rainbow_breath_effect(delay=0.01):
         (100, 0, 100)   # 紫
     ]
     
-    for r, g, b in colors:
-        # 逐漸變亮
-        for duty in range(0, 101, 2):
-            set_color(
-                r * duty / 100,
-                g * duty / 100,
-                b * duty / 100
-            )
-            time.sleep(delay)
-            
-        time.sleep(0.2)  # 在最亮處停留一下
+    # 設置初始顏色（從第一個顏色開始）
+    current_r, current_g, current_b = colors[0]
+    set_color(current_r, current_g, current_b)
+    time.sleep(1)  # 在第一個顏色停留一秒
+    
+    # 在顏色之間平滑過渡
+    for i in range(len(colors)):
+        # 獲取當前顏色和下一個顏色
+        current_color = colors[i]
+        next_color = colors[(i + 1) % len(colors)]  # 循環到第一個顏色
         
-        # 逐漸變暗
-        for duty in range(100, -1, -2):
-            set_color(
-                r * duty / 100,
-                g * duty / 100,
-                b * duty / 100
-            )
+        # 解包顏色值
+        current_r, current_g, current_b = current_color
+        next_r, next_g, next_b = next_color
+        
+        # 計算顏色差異
+        diff_r = next_r - current_r
+        diff_g = next_g - current_g
+        diff_b = next_b - current_b
+        
+        # 平滑過渡到下一個顏色（50步）
+        steps = 50
+        for step in range(steps + 1):
+            # 計算當前步驟的顏色
+            ratio = step / steps
+            r = current_r + diff_r * ratio
+            g = current_g + diff_g * ratio
+            b = current_b + diff_b * ratio
+            
+            # 設置顏色
+            set_color(r, g, b)
             time.sleep(delay)
+        
+        # 在每個顏色停留一下
+        time.sleep(0.5)
 
 def main():
     """主程式"""
