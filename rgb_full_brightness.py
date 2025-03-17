@@ -8,7 +8,7 @@ GPIO.setmode(GPIO.BOARD)
 # 設定 RGB LED 的 GPIO 腳位
 RED_PIN = 3
 GREEN_PIN = 5
-BLUE_PIN = 7
+BLUE_PIN = 11
 
 # 設定 GPIO 輸出
 GPIO.setup(RED_PIN, GPIO.OUT)
@@ -33,9 +33,9 @@ def set_color(r, g, b):
         g (int): 綠色亮度 (0-100，0=全亮，100=全暗)
         b (int): 藍色亮度 (0-100，0=全亮，100=全暗)
     """
-    red_pwm.ChangeDutyCycle( r)
-    green_pwm.ChangeDutyCycle( g)
-    blue_pwm.ChangeDutyCycle( b)
+    red_pwm.ChangeDutyCycle(100 - r)
+    green_pwm.ChangeDutyCycle(100 - g)
+    blue_pwm.ChangeDutyCycle(100 - b)
 
 try:
     print("RGB LED 全亮模式啟動")
