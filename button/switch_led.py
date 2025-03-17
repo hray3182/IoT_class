@@ -79,6 +79,8 @@ def button_callback(channel):
 
 def main():
     """主程式"""
+    global current_color_index
+    
     try:
         print("RGB LED 顏色切換程式啟動")
         print(f"按鈕連接到物理位置 {BUTTON_PIN}")
