@@ -51,6 +51,7 @@ def set_color(r, g, b):
         g (int): 綠色亮度 (0-100，0=全亮，100=全暗)
         b (int): 藍色亮度 (0-100，0=全亮，100=全暗)
     """
+    print(f"設置顏色: R:{r}, G:{g}, B:{b}")
     red_pwm.ChangeDutyCycle(100 - r)
     green_pwm.ChangeDutyCycle(100 - g)
     blue_pwm.ChangeDutyCycle(100 - b)
@@ -59,8 +60,12 @@ def button_callback(channel):
     """按鈕回調函數，當按鈕按下時切換顏色"""
     global current_color_index
     
+    # 獲取按鈕狀態
+    button_state = GPIO.input(BUTTON_PIN)
+    print(f"按鈕事件觸發: 狀態 = {button_state} ({'HIGH' if button_state else 'LOW'})")
+    
     # 只在按鈕按下時（LOW）切換顏色，忽略按鈕釋放（HIGH）
-    if not GPIO.input(BUTTON_PIN):
+    if not button_state:
         # 切換到下一個顏色
         current_color_index = (current_color_index + 1) % len(colors)
         r, g, b = colors[current_color_index]
@@ -76,19 +81,46 @@ def main():
     """主程式"""
     try:
         print("RGB LED 顏色切換程式啟動")
+        print(f"按鈕連接到物理位置 {BUTTON_PIN}")
+        print(f"LED 連接到物理位置 紅:{RED_PIN}, 綠:{GREEN_PIN}, 藍:{BLUE_PIN}")
         print("按下按鈕切換顏色")
         print("按下 Ctrl+C 可停止程式")
+        
+        # 測試按鈕初始狀態
+        initial_button_state = GPIO.input(BUTTON_PIN)
+        print(f"按鈕初始狀態: {initial_button_state} ({'HIGH' if initial_button_state else 'LOW'})")
         
         # 設置初始顏色（第一個顏色）
         r, g, b = colors[current_color_index]
         set_color(r, g, b)
         print(f"初始顏色: 紅色 (R:{r}, G:{g}, B:{b})")
         
-        # 添加事件檢測，當按鈕狀態改變時調用回調函數
-        GPIO.add_event_detect(BUTTON_PIN, GPIO.BOTH, callback=button_callback, bouncetime=300)
+        # 使用輪詢方式檢測按鈕狀態，而不是事件檢測
+        last_button_state = initial_button_state
         
         # 保持程式運行
         while True:
+            # 讀取當前按鈕狀態
+            current_button_state = GPIO.input(BUTTON_PIN)
+            
+            # 檢測按鈕狀態變化（從HIGH到LOW，表示按下按鈕）
+            if last_button_state == 1 and current_button_state == 0:
+                print("按鈕被按下")
+                # 切換到下一個顏色
+                current_color_index = (current_color_index + 1) % len(colors)
+                r, g, b = colors[current_color_index]
+                
+                # 設置新顏色
+                set_color(r, g, b)
+                
+                # 顯示當前顏色信息
+                color_names = ["紅色", "橙色", "黃色", "綠色", "藍色", "靛色", "紫色"]
+                print(f"切換到顏色 {current_color_index + 1}: {color_names[current_color_index]}")
+            
+            # 更新上一個按鈕狀態
+            last_button_state = current_button_state
+            
+            # 短暫延遲，避免CPU使用率過高
             time.sleep(0.1)
             
     except KeyboardInterrupt:
