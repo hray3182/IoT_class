@@ -31,8 +31,8 @@ def fade_in_out(pwm, delay=0.02):
         pwm.ChangeDutyCycle(duty)
         time.sleep(delay)
 
-def rainbow_effect(delay=0.01):
-    """ 產生七彩漸變效果 """
+def rainbow_breath_effect(delay=0.01):
+    """ 產生七彩呼吸效果 """
     # 定義不同顏色組合 (R, G, B)
     colors = [
         (100, 0, 0),    # 紅
@@ -45,19 +45,25 @@ def rainbow_effect(delay=0.01):
     ]
     
     for r, g, b in colors:
-        red_pwm.ChangeDutyCycle(r)
-        green_pwm.ChangeDutyCycle(g)
-        blue_pwm.ChangeDutyCycle(b)
-        time.sleep(0.5)  # 每個顏色停留時間
+        # 逐漸變亮
+        for duty in range(0, 101, 2):
+            red_pwm.ChangeDutyCycle(r * duty / 100)
+            green_pwm.ChangeDutyCycle(g * duty / 100)
+            blue_pwm.ChangeDutyCycle(b * duty / 100)
+            time.sleep(delay)
+            
+        time.sleep(0.2)  # 在最亮處停留一下
+        
+        # 逐漸變暗
+        for duty in range(100, -1, -2):
+            red_pwm.ChangeDutyCycle(r * duty / 100)
+            green_pwm.ChangeDutyCycle(g * duty / 100)
+            blue_pwm.ChangeDutyCycle(b * duty / 100)
+            time.sleep(delay)
 
 try:
     while True:
-        rainbow_effect()  # 顯示七彩效果
-        
-        # 原來的單色漸變效果，如果不需要可以註解掉
-        # fade_in_out(red_pwm)   # 紅色變亮變暗
-        # fade_in_out(green_pwm) # 綠色變亮變暗
-        # fade_in_out(blue_pwm)  # 藍色變亮變暗
+        rainbow_breath_effect()  # 顯示七彩呼吸效果
 except KeyboardInterrupt:
     pass
 finally:
