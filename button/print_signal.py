@@ -23,16 +23,15 @@ def main():
     """主程式"""
     try:
         print(f"按鈕監聽程式啟動，監聽物理位置 {BUTTON_PIN}")
+        print("按下按鈕查看輸入值")
         print("按下 Ctrl+C 可停止程式")
         
         # 添加事件檢測，當按鈕狀態改變時調用回調函數
         GPIO.add_event_detect(BUTTON_PIN, GPIO.BOTH, callback=button_callback, bouncetime=200)
         
-        # 保持程式運行，並持續顯示當前輸入狀態
+        # 保持程式運行，但不自動更新狀態
         while True:
-            current_value = GPIO.input(BUTTON_PIN)
-            print(f"當前按鈕狀態: {current_value} ({'HIGH' if current_value else 'LOW'})")
-            time.sleep(1)  # 每秒更新一次
+            time.sleep(0.1)
             
     except KeyboardInterrupt:
         print("\n程式已被使用者中斷")
