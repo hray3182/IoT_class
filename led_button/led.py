@@ -15,10 +15,10 @@ GPIO.setup(RED_PIN, GPIO.OUT)
 GPIO.setup(GREEN_PIN, GPIO.OUT)
 GPIO.setup(BLUE_PIN, GPIO.OUT)
 
-# 使用 PWM 控制亮度，頻率設定為 100Hz
-red_pwm = GPIO.PWM(RED_PIN, 100)
-green_pwm = GPIO.PWM(GREEN_PIN, 100)
-blue_pwm = GPIO.PWM(BLUE_PIN, 100)
+# 使用 PWM 控制亮度，頻率設定為 1000Hz（提高頻率以避免在相機拍攝時閃爍）
+red_pwm = GPIO.PWM(RED_PIN, 1000)
+green_pwm = GPIO.PWM(GREEN_PIN, 1000)
+blue_pwm = GPIO.PWM(BLUE_PIN, 1000)
 
 # 啟動 PWM，初始值為 0（LED 關閉）
 red_pwm.start(0)
