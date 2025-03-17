@@ -10,13 +10,20 @@ buzzer_pin = 15
 # 設置蜂鳴器引腳為輸出
 GPIO.setup(buzzer_pin, GPIO.OUT)
 
-# 創建PWM對象，頻率為1000Hz
-buzzer = GPIO.PWM(buzzer_pin, 1000)
-
 try:
     print("蜂鳴器測試開始...")
     
-    # 啟動蜂鳴器
+    # 方法1：直接控制高低電平
+    print("測試方法1：直接控制高低電平")
+    for _ in range(5):
+        GPIO.output(buzzer_pin, GPIO.HIGH)  # 打開蜂鳴器
+        time.sleep(0.5)
+        GPIO.output(buzzer_pin, GPIO.LOW)   # 關閉蜂鳴器
+        time.sleep(0.5)
+    
+    # 方法2：使用PWM模擬不同頻率
+    print("測試方法2：使用PWM模擬不同頻率")
+    buzzer = GPIO.PWM(buzzer_pin, 1000)
     buzzer.start(50)  # 佔空比為50%
     
     # 播放不同頻率的聲音
@@ -27,21 +34,23 @@ try:
         buzzer.ChangeFrequency(freq)
         time.sleep(0.5)
     
-    # 播放警報聲
-    print("播放警報聲...")
-    for _ in range(5):
-        buzzer.ChangeFrequency(800)
-        time.sleep(0.2)
-        buzzer.ChangeFrequency(600)
-        time.sleep(0.2)
-    
     # 停止蜂鳴器
     buzzer.stop()
+    
+    # 方法3：手動產生方波
+    print("測試方法3：手動產生方波")
+    for _ in range(10):
+        for _ in range(100):  # 產生一個約1kHz的方波
+            GPIO.output(buzzer_pin, GPIO.HIGH)
+            time.sleep(0.0005)
+            GPIO.output(buzzer_pin, GPIO.LOW)
+            time.sleep(0.0005)
+        time.sleep(0.1)
+    
     print("蜂鳴器測試結束")
 
 except KeyboardInterrupt:
     # 當按下Ctrl+C時，停止蜂鳴器並清理GPIO
-    buzzer.stop()
     print("程序被用戶中斷")
 
 finally:
