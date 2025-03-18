@@ -1,6 +1,6 @@
 import time
 import RPi.GPIO as GPIO
-SENSOR_PIN = 11
+SENSOR_PIN = 38
 LED_PIN = 13
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
@@ -11,9 +11,9 @@ while True:
     value = GPIO.input(SENSOR_PIN)
     print(f"gas value = {value}")
     if value < 1: #low active
-        GPIO.output(LED_PIN, 1)
+        # GPIO.output(LED_PIN, 1)
         print("LOVW ")
     else:
-        GPIO.output(LED_PIN, 0)
+        # GPIO.output(LED_PIN, 0)
         print("HIGH")
         time.sleep(0.5)
