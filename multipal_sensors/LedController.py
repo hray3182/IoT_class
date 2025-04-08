@@ -1,6 +1,7 @@
 import threading
 import time
 import RPi.GPIO as GPIO
+import colorsys  # 新增匯入 colorsys 模組
 
 # Import 必要的物件
 from Button import Button

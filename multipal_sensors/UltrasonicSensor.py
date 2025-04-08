@@ -1,3 +1,6 @@
+import RPi.GPIO as GPIO  # 新增匯入 GPIO 模組
+import time  # 新增匯入 time 模組
+
 class UltrasonicSensor:
     """超音波距離感測器類別"""
     

@@ -1,3 +1,5 @@
+import RPi.GPIO as GPIO  # 新增匯入 GPIO 模組
+
 class Button:
     """按鈕控制類別"""
     

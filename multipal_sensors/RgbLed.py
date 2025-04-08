@@ -1,3 +1,5 @@
+import colorsys  # 新增匯入 colorsys 模組
+
 class RgbLed:
     """RGB LED 控制類別"""
     

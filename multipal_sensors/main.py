@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 import threading
-import colorsys
+import colorsys  # 新增匯入 colorsys 模組
 
 # Import 各個物件
 from UltrasonicSensor import UltrasonicSensor
